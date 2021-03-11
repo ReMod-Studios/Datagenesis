@@ -1,0 +1,22 @@
+---
+namespace: lumidep
+
+blocks:
+  # Regular old simpleton blocks
+  - lumerock
+  - brackwood_planks
+
+  # Some special attributes
+  - id: brackwood_log
+    generator: log_block
+
+  # More complicated attributes
+  - id: brackwood_door
+    generator:
+      id: door_block
+      parent_block: brackwood_planks
+    render_layer: translucent
+
+  # Macros to ease your pain
+  - macro: all_wooden_blocks
+    prefix: brackwood
