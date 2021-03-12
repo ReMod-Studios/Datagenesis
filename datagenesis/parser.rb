@@ -10,46 +10,62 @@ module Datagenesis
   # Parser for the datagenesis.yml structure
   class Parser
     def self.parse_struct(struct)
-      # Default values: no meta, root dummy processor
+      # Default values: no attributes, root dummy processor
       Parser.new.parse_group_recur(struct.update(group: 'root'))
     end
 
     def parse_group_recur(struct)
-      meta, group, contains = struct.values_at :meta, :group, :contains
+      special_keys = %i[group contains]
+      special, rest = struct.partition { |k, _| special_keys.include? k }.map(&:to_h)
+      group, contains = special.values_at(*special_keys)
 
-      # Update meta
-      @meta.update meta unless meta.nil?
-
-      @processors.push Processor.from_struct(group)
-
-      ret = contains.map { |e| determine_and_parse_entry(e) }
-
-      @processors.pop
+      ret = []
+      frame do |f|
+        # Update attributes
+        f.attributes.update rest unless rest.nil?
+        f.processors << Processor.new(group, f.attributes)
+        ret.concat(contains.map { |e| determine_and_parse_entry(e) })
+      end
       ret.flatten # flatten the cascaded arrays of entries
     end
 
     private
 
-    def initialize(meta = {}, processors = [])
-      @meta = meta
-      @processors = processors
+    def initialize
+      @frames = [Frame.new]
+    end
+
+    def frame
+      @frame = @frames.last.dup
+      @frames.push @frame
+      yield @frame
+      @frames.pop
+    end
+
+    class Frame
+      attr_reader :attributes, :processors
+
+      def initialize(processors = [], attributes = {})
+        @processors = processors
+        @attributes = attributes
+      end
     end
 
     def parse_item(struct, namespace)
       id, processors = struct.values_at :id, :processors
-      parsed_processors = @processors
+      parsed_processors = @frame.processors
                           .dup
-                          .concat(processors.map { |p| Processor.from_struct(p) })
+                          .concat(processors.map { |p| Processor.from_struct(p, @frame.attributes) })
       Entry.new(Identifier.new(namespace, id), parsed_processors)
     end
 
     def determine_and_parse_entry(entry)
-      namespace = @meta[:namespace]
+      namespace = @frame.attributes[:namespace]
 
       case entry
       when String
         # Simple string
-        Entry.new(Identifier.new(namespace, entry), @processors.dup)
+        Entry.new(Identifier.new(namespace, entry), @frame.processors.dup)
       when Hash
         return parse_group_recur(entry) if entry.key? :group
         return parse_item(entry, namespace) if entry.key? :id

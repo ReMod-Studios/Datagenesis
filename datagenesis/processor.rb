@@ -11,12 +11,12 @@ module Datagenesis
       @attributes = attributes
     end
 
-    def self.from_struct(struct)
+    def self.from_struct(struct, attributes = {})
       if struct.is_a? String
-        Processor.new(struct)
+        Processor.new(struct, attributes)
       else
         id = struct[:id]
-        rest = struct.reject { |k, _| k == :id }
+        rest = struct.reject { |k, _| k == :id }.update attributes
         Processor.new(id, rest)
       end
     end

@@ -1,10 +1,10 @@
 ---
-meta:
-  namespace: lumidep
-#implicit
-#group: root
+namespace: lumidep
+package: com.remodstudios.lumidep
+
 contains:
   - group: block
+    java_class: LumiDepBlocks
     contains:
       - group: wooden_properties
         contains:
@@ -16,7 +16,7 @@ contains:
 
           - id: brackwood_door
             processors:
-              - log_model
+              - door_model
               - id: render_layer
                 layer: translucent
 
