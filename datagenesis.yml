@@ -1,22 +1,32 @@
 ---
-namespace: lumidep
+meta:
+  namespace: lumidep
+#implicit
+#group: root
+contains:
+  - group: block
+    contains:
+      - group: wooden_properties
+        contains:
+          - brackwood_planks
 
-blocks:
-  # Regular old simpleton blocks
-  - lumerock
-  - brackwood_planks
+          - id: brackwood_log
+            processors:
+              - log_model
 
-  # Some special attributes
-  - id: brackwood_log
-    generator: log_block
+          - id: brackwood_door
+            processors:
+              - log_model
+              - id: render_layer
+                layer: translucent
 
-  # More complicated attributes
-  - id: brackwood_door
-    generator:
-      id: door_block
-      parent_block: brackwood_planks
-    render_layer: translucent
+  - id: lumerock
+    processors:
+      - block
+      - stone_properties
+      - id: block_settings
+        luminance: 15
 
   # Macros to ease your pain
-  - macro: all_wooden_blocks
-    prefix: brackwood
+  #- macro: all_wooden_blocks
+  #  prefix: brackwood

@@ -1,0 +1,55 @@
+Pipeline Processors (PipProc) alter the current output of the pipeline based on provided arguments.
+The *End* PipProc is special as it does the actual outputting of Java source code, JSON, ...
+
+Pipeline
+   [Lumerock]         Root ---> Block PipProc ---> Stone Prop. PipProc  ---> Block Settings PipProc ---> End
+   [Brackwood Log]    Root ---> Block PipProc ---> Wooden Prop. PipProc ---> Log Model PipProc  ---> End
+   [Brackwood Planks] Root ---> Block PipProc ---> Wooden Prop. PipProc ---> End
+   [Brackwood Door]   Root ---> Block PipProc ---> Wooden Prop. PipProc ---> Door Model PipProc ---> Render Layer PipProc ---> End
+
+Usually declared as thus:
+
+entries:
+    - id: brackwood_log
+      processors: # pipeline configuration
+        - block
+        - wooden_properties
+        - log_model
+    #...
+
+You can group entries based on PipProcs to avoid clutter:
+
+entries:
+    - group: block
+      entries:
+        - group: wooden_properties
+          entries:
+            - brackwood_planks
+
+Sometimes it is beneficial to just specify the rest of the PipProcs on one entry, so you can mix them:
+
+entries:
+    - group: block
+      entries:
+        - group: wooden_properties
+          entries:
+            - brackwood_planks
+
+            - id: brackwood_log
+              processors:
+                - log_model
+                
+            - id: brackwood_door
+              processors:
+                - log_model
+                - id: render_layer
+                  layer: translucent
+
+        - id: lumerock
+          processors:
+            - stone_properties
+            - id: block_settings
+              luminance: 15
+          
+
+            
