@@ -12,9 +12,5 @@ module Datagenesis
       @id = id
       @processors = processors
     end
-
-    def self.from_ns_and_id(namespace, id, processors)
-      Entry.new(Identifier.new(namespace, id), processors.dup)
-    end
   end
 end
