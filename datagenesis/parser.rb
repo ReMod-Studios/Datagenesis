@@ -11,7 +11,8 @@ module Datagenesis
   class Parser
     def self.parse_struct(struct)
       # Default values: no attributes, root dummy processor
-      Parser.new.parse_group_recur(struct.update(group: 'root'))
+      Parser.new
+            .parse_group_recur(struct.update(group: 'root'))
     end
 
     def parse_group_recur(struct)
@@ -23,7 +24,7 @@ module Datagenesis
       frame do |f|
         # Update attributes
         f.attributes.update rest unless rest.nil?
-        f.processors << Processor.new(group, f.attributes)
+        f.processors << Processor.class_for(group).new(**f.attributes)
         ret.concat(contains.map { |e| determine_and_parse_entry(e) })
       end
       ret.flatten # flatten the cascaded arrays of entries

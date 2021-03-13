@@ -2,10 +2,8 @@
 
 module Datagenesis
   module Processors
-    class Block < Processor
-      def process
-
-      end
+    class Root < Processor
+      register :root
     end
   end
 end
