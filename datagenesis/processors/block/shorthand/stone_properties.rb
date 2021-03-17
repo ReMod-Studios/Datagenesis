@@ -6,6 +6,6 @@ module Datagenesis
       class StoneProperties < Processor
         register :stone_properties
       end
-      end
+    end
   end
 end

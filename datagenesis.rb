@@ -8,7 +8,3 @@ require_relative 'datagenesis/processors'
 module Datagenesis
   VERSION = '0.1.0'
 end
-
-
-
-

@@ -7,10 +7,7 @@ module Datagenesis
         register :block_settings
 
         # TODO: add more settings
-        def initialize(luminance:, **kwargs)
-          super(**kwargs)
-          @luminance = luminance
-        end
+        processor_attr :luminance
       end
     end
   end

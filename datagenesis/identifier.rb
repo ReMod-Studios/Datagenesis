@@ -15,7 +15,7 @@ module Datagenesis
     end
 
     def inspect
-      %("#{@namespace}:#{@path}")
+      %(Identifier["#{@namespace}:#{@path}"])
     end
   end
 end

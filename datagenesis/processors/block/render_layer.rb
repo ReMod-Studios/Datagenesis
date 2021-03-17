@@ -6,10 +6,7 @@ module Datagenesis
       class RenderLayer < Processor
         register :render_layer
 
-        def initialize(layer:, **kwargs)
-          super(**kwargs)
-          @layer = layer
-        end
+        processor_attr :layer
       end
     end
   end

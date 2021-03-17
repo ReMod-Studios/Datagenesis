@@ -6,4 +6,6 @@ require_relative 'datagenesis'
 
 test = YAML.safe_load_file('datagenesis.yml', symbolize_names: true)
 
-pp Datagenesis::Parser.parse_struct(test)
+entries = Datagenesis::Parser.parse_struct(test)
+pp entries
+entries.each(&:process)

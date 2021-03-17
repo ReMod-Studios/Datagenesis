@@ -12,5 +12,11 @@ module Datagenesis
       @id = id
       @processors = processors
     end
+
+    def process
+      @processors.each do |p|
+        p.process self
+      end
+    end
   end
 end

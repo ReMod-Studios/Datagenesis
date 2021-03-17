@@ -5,11 +5,7 @@ module Datagenesis
     module Block
       class Block < Processor
         register :block
-
-        def initialize(java_class:, **kwargs)
-          super(**kwargs)
-          @java_class = java_class
-        end
+        processor_attr :java_class
       end
     end
   end
