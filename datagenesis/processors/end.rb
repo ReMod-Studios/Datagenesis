@@ -15,7 +15,7 @@ module Datagenesis
 
       def process_model(id, category, model)
         process_json(
-          "assets/#{id.namespace}/models/#{category}/#{id.path}.json",
+          "java_resources/assets/#{id.namespace}/models/#{category}/#{id.path}.json",
           model
         )
       end

@@ -12,7 +12,7 @@ module Datagenesis
           super
           id = entry.id
 
-          block_path = id.prefixed 'block'
+          block_path = id.wrap_path prefix: 'block/'
 
           process_block_model id, {
             'parent': 'minecraft:block/cube_all',

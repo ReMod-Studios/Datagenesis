@@ -14,16 +14,8 @@ module Datagenesis
       "#{@namespace}:#{@path}"
     end
 
-    def prefixed(*prefixes, join_char: '/')
-      Identifier.new(namespace, "#{prefixes.join(join_char)}#{join_char}#{path}")
-    end
-
-    def suffixed(*suffixes, join_char: '_')
-      Identifier.new(namespace, "#{path}#{join_char}#{suffixes.join(join_char)}")
-    end
-
-    def wrap_path(prefix = '', suffix = '')
-      Identifier.new(namespace, prefix + path + suffix)
+    def wrap_path(prefix: '', suffix: '')
+      Identifier.new(@namespace, prefix + @path + suffix)
     end
 
     def inspect

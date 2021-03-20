@@ -34,5 +34,6 @@ module Datagenesis
     bool_property :open
     property :half, *%i[upper lower]
     property :hinge, *%i[left right]
+    property :axis, *%i[x y z]
   end
 end

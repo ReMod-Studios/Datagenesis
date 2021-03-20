@@ -20,16 +20,16 @@ module Datagenesis
 
         def process_block_model(id, data)
           textures_hsh = {
-            'top': id.wrap_path('block/', '_top'),
-            'bottom': id.wrap_path('block/', '_bottom')
+            'top': id.wrap_path(prefix: 'block/', suffix: '_top'),
+            'bottom': id.wrap_path(prefix: 'block/', suffix: '_bottom')
           }
 
           data[:textures] = textures_hsh
 
-          forward_model('bottom', '_bottom', id, data)
-          forward_model('bottom_hinge', '_bottom_rh', id, data)
-          forward_model('top', '_top', id, data)
-          forward_model('top_hinge', '_top_rh', id, data)
+          forward_model('_bottom', '_bottom', id, data)
+          forward_model('_bottom_hinge', '_bottom_rh', id, data)
+          forward_model('_top', '_top', id, data)
+          forward_model('_top_hinge', '_top_rh', id, data)
         end
 
         def process_loot_table(id, loot_table, category = 'blocks')
@@ -37,9 +37,9 @@ module Datagenesis
             pool[:entries].each do |entry|
               entry[:conditions] = [
                 {
-                  'condition': 'minecraft:block_state_property',
-                  'block': 'minecraft:acacia_door',
-                  'properties': { 'half': 'lower' }
+                  condition: 'minecraft:block_state_property',
+                  block: 'minecraft:acacia_door',
+                  properties: { 'half': 'lower' }
                 }
               ]
             end
@@ -52,10 +52,10 @@ module Datagenesis
 
         def forward_model(path_suffix, parent_suffix, id, data)
           @nxt.process_block_model(
-            id.suffixed(path_suffix),
+            id.wrap_path(suffix: path_suffix),
             data.merge(
               {
-                parent: id.wrap_path('block/', parent_suffix)
+                parent: id.wrap_path(prefix: 'block/', suffix: parent_suffix)
               }
             )
           )
