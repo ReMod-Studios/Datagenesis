@@ -4,8 +4,14 @@ require 'yaml'
 
 require_relative 'datagenesis'
 
-test = YAML.safe_load_file('datagenesis.yml', symbolize_names: true)
+module Datagenesis
 
-entries = Datagenesis::Parser.parse_struct(test)
-pp entries
-entries.each(&:process)
+  test = YAML.safe_load_file('datagenesis.yml', symbolize_names: true)
+
+  Dir.chdir('out')
+  entries = Parser.parse_struct(test)
+  pp entries
+
+  entries.each(&:process)
+
+end

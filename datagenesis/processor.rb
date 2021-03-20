@@ -4,12 +4,48 @@ module Datagenesis
   # Represents a pipeline processor that
   # processes and outputs data.
   class Processor
+    attr_accessor :nxt
 
     def initialize(**kwargs)
       # Left blank for runtime patching needs
     end
 
-    def process(entry); end
+    def process(entry)
+      @nxt&.process entry
+    end
+
+    private
+
+    def method_missing(sym, *args)
+      if sym.start_with? 'process'
+        begin
+          original = self.class.method(sym)
+          # make it accessible even if a naming clash occurs
+          define_method(:"#{sym}!", original) unless original.nil?
+        rescue NameError => _e
+          # Ignored
+        end
+
+        forward = lambda do |*a, **kwargs, &block|
+          # forward the message
+          @nxt&.send(sym, *a, **kwargs, &block)
+        end
+
+        self.class.define_method(sym, &forward)
+        forward.call(*args)
+      else
+        super
+      end
+    end
+
+    def forward(*args, **kwargs, &block)
+      caller = caller_locations(1, 1)[0].label.to_sym
+      @nxt&.send(caller, *args, **kwargs, &block)
+    end
+
+    def respond_to_missing?(*args)
+      sym.start_with?('process') || super
+    end
 
     @id_to_class = {}
 
@@ -48,7 +84,5 @@ module Datagenesis
 
       attr_reader :id_to_class
     end
-
-    processor_attr :namespace
   end
 end

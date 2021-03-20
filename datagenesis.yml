@@ -10,9 +10,9 @@ contains:
         contains:
           - brackwood_planks
 
-          - id: brackwood_log
-            processors:
-              - log_model
+          #- id: brackwood_log
+          #  processors:
+          #    - log_model
 
           - id: brackwood_door
             processors:

@@ -4,11 +4,14 @@ require 'json'
 require 'fileutils'
 require_relative 'entry'
 require_relative 'processor'
-require_relative 'identifier'
+require_relative 'util/identifier'
 
 module Datagenesis
   # Parser for the datagenesis.yml structure
   class Parser
+
+    SPECIAL_KEYS = %i[group contains].freeze
+
     def self.parse_struct(struct)
       # Default values: no attributes, root dummy processor
       Parser.new
@@ -16,9 +19,8 @@ module Datagenesis
     end
 
     def parse_group_recur(struct)
-      special_keys = %i[group contains]
-      special, rest = struct.partition { |k, _| special_keys.include? k }.map(&:to_h)
-      group, contains = special.values_at(*special_keys)
+      special, rest = struct.partition { |k, _| SPECIAL_KEYS.include? k }.map(&:to_h)
+      group, contains = special.values_at(*SPECIAL_KEYS)
 
       ret = []
       frame do |f|
@@ -39,8 +41,9 @@ module Datagenesis
     def frame
       @frame = @frames.last.dup
       @frames.push @frame
-      yield @frame
+      res = yield @frame
       @frames.pop
+      res
     end
 
     class Frame
@@ -54,10 +57,12 @@ module Datagenesis
 
     def parse_item(struct, namespace)
       id, processors = struct.values_at :id, :processors
-      parsed_processors = @frame.processors
-                          .dup
-                          .concat(processors.map { |p| Processor.from_struct(p, @frame.attributes) })
-      Entry.new(Identifier.new(namespace, id), parsed_processors)
+      frame do |f|
+        # FIXME: dup on this level wont preserve the state of @nxt
+        copy = f.processors.dup
+        copy.concat processors.map { Processor.from_struct(_1, f.attributes) }
+        Entry.new(Identifier.new(namespace, id), copy)
+      end
     end
 
     def determine_and_parse_entry(entry)
