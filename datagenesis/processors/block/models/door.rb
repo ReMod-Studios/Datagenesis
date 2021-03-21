@@ -20,8 +20,8 @@ module Datagenesis
 
         def process_block_model(id, data)
           textures_hsh = {
-            'top': id.wrap_path(prefix: 'block/', suffix: '_top'),
-            'bottom': id.wrap_path(prefix: 'block/', suffix: '_bottom')
+            top: id.wrap_path(prefix: 'block/', suffix: '_top'),
+            bottom: id.wrap_path(prefix: 'block/', suffix: '_bottom')
           }
 
           data[:textures] = textures_hsh
@@ -55,7 +55,7 @@ module Datagenesis
             id.wrap_path(suffix: path_suffix),
             data.merge(
               {
-                parent: id.wrap_path(prefix: 'block/', suffix: parent_suffix)
+                parent: "minecraft:block/door#{parent_suffix}"
               }
             )
           )

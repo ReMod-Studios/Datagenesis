@@ -16,7 +16,8 @@ module Datagenesis
         end
 
         def conf_multipart_blockstate
-          multipart = yield || {}
+          multipart = []
+          yield multipart
           {
             'multipart': multipart
           }

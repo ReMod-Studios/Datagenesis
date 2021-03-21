@@ -4,8 +4,6 @@
   block
   block_settings
   render_layer
-  shorthand/stone_properties
-  shorthand/wooden_properties
-  models/log
-  models/door
+  shorthand
+  models
 ].each { |e| require_relative "block/#{e}" }

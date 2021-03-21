@@ -14,6 +14,10 @@ contains:
             processors:
               - log_model
 
+          - id: brackwood_fence
+            processors:
+              - fence_model
+
           - id: brackwood_door
             processors:
               - door_model

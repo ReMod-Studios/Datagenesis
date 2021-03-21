@@ -23,8 +23,8 @@ module Datagenesis
 
         def process_block_model(id, data)
           textures_hsh = {
-            'end': id.wrap_path(prefix: 'block/', suffix: '_top'),
-            'side': id.wrap_path(prefix: 'block/')
+            end: id.wrap_path(prefix: 'block/', suffix: '_top'),
+            side: id.wrap_path(prefix: 'block/')
           }
 
           @nxt.process_block_model(
