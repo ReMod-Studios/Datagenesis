@@ -3,37 +3,41 @@
 require_relative 'direction'
 
 module Datagenesis
-  VariantPropertyValue = Struct.new :name, :value
+  VariantPropertyValue = Struct.new :id, :name, :value
 
   class VariantProperty
-    attr_reader :name, :values
+    attr_reader :id, :name, :values
 
     @properties = {}
 
-    def initialize(name, *values)
+    def initialize(id, *values, name: id)
+      @id = id.to_sym.freeze
       @name = name.to_sym.freeze
-      @values = values.map { |v| VariantPropertyValue.new(@name, v) }.freeze
+      @values = values.map { |v| VariantPropertyValue.new(@id, @name, v) }.freeze
     end
 
     class << self
-      def property(name, *values)
-        @properties[name] = Datagenesis::VariantProperty.new name, *values
+      def property(id, *values, name: id)
+        @properties[id] = Datagenesis::VariantProperty.new id, *values, name: name
       end
 
-      def bool_property(name)
-        property name, true, false
+      def bool_property(id, name: id)
+        property id, true, false, name: name
       end
 
-      def get(name)
-        @properties[name]
+      def get(id)
+        @properties[id]
       end
     end
 
-    property :direction, *Direction::HORIZONTALS
+    property :facing, *Direction::VALUES
+    property :horizontal_facing, *Direction::HORIZONTALS, name: :facing
     bool_property :powered
     bool_property :open
-    property :half, *%i[upper lower]
-    property :hinge, *%i[left right]
+    property :block_half, *%i[top bottom], name: :half
+    property :double_half, *%i[upper lower], name: :half
+    property :slab_type, *%i[top bottom double], name: :type
+    property :door_hinge, *%i[left right], name: :hinge
     property :axis, *%i[x y z]
   end
 end

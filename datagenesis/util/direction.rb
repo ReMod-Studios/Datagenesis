@@ -16,8 +16,8 @@ module Datagenesis
     UP    = Direction.new(:up,    1, 0, nil)
     NORTH = Direction.new(:north, 2, 3, 2)
     SOUTH = Direction.new(:south, 3, 2, 0)
-    EAST  = Direction.new(:east,  4, 5, 1)
-    WEST  = Direction.new(:west,  5, 4, 3)
+    WEST  = Direction.new(:west,  4, 5, 1)
+    EAST  = Direction.new(:east,  5, 4, 3)
     VALUES = [DOWN, UP, NORTH, SOUTH, EAST, WEST].freeze
     HORIZONTALS = [NORTH, SOUTH, EAST, WEST].freeze
 

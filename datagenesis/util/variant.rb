@@ -8,9 +8,9 @@ module Datagenesis
       @property_pairs = property_pairs.freeze || []
     end
 
-    def [](*names)
-      @property_pairs.filter { |v| v if names.any? v.name }
-                     .sort_by { |a| names.index(a.name) || Float::INFINITY }
+    def [](*ids)
+      @property_pairs.filter { |v| v if ids.any? v.id }
+                     .sort_by { |a| ids.index(a.id) || Float::INFINITY }
                      .map(&:value)
                      .freeze
     end

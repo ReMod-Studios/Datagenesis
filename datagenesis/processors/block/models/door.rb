@@ -10,7 +10,8 @@ module Datagenesis
         include Datagenesis::Processors::Block::ModelUtils
 
         register :door_model
-        VARIANTS = Datagenesis::VariantFactory.build(%i[direction half hinge open])
+        PROPERTIES = %i[horizontal_facing double_half door_hinge open].freeze
+        VARIANTS = Datagenesis::VariantFactory.build PROPERTIES
 
         def process_blockstate(id, data)
           data[:variants] = VARIANTS.map { |var| map_each_variant(var, id) }.to_h
@@ -38,13 +39,12 @@ module Datagenesis
               entry[:conditions] = [
                 {
                   condition: 'minecraft:block_state_property',
-                  block: 'minecraft:acacia_door',
+                  block: id,
                   properties: { 'half': 'lower' }
                 }
               ]
             end
           end
-          pp loot_table
           forward(id, loot_table, category)
         end
 
@@ -63,12 +63,12 @@ module Datagenesis
 
         # region Helpers
         def map_each_variant(var, id)
-          direction, hinge, half, open = var[:direction, :hinge, :half, :open]
+          facing, hinge, half, open = var[*PROPERTIES]
           is_hinge_left = hinge.eql?(:left)
 
           var_obj = {
-            'model': make_model_string(id, is_hinge_left, open, half),
-            'y': ignore_zero(calc_y_rot(direction, is_hinge_left, open))
+            model: make_model_string(id, is_hinge_left, open, half),
+            y: calc_y_rot(facing, is_hinge_left, open)
           }.compact
 
           [var.to_s, var_obj]
@@ -91,7 +91,7 @@ module Datagenesis
         def calc_y_rot(direction, is_hinge_left, open)
           hid = direction.horizontal_ord + 1
           hid += is_hinge_left ? 1 : -1 if open
-          hid % 4 * 90
+          ignore_zero hid % 4 * 90
         end
         # endregion
       end

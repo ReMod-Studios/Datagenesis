@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 %w[
-  log door fence
+  log door fence trapdoor
 ].each { |e| require_relative "models/#{e}" }
