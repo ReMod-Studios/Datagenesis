@@ -10,11 +10,11 @@ module Datagenesis
         register :fence_model
         include Datagenesis::Processors::Block::ModelUtils
 
-        def process_blockstate(id, _data)
+        def process_blockstate(id, data)
           post_id = id.wrap_path(prefix: 'block/', suffix: '_post')
           side_id = id.wrap_path(prefix: 'block/', suffix: '_side')
 
-          data = conf_multipart_blockstate do |m|
+          conf_multipart_blockstate(data) do |m|
             m << { apply: { model: post_id.to_s } }
             m << { when: { north: 'true' }, apply: { model: side_id.to_s, uvlock: true         } }
             m << { when: { east:  'true' }, apply: { model: side_id.to_s, uvlock: true, y: 90  } }
@@ -29,19 +29,13 @@ module Datagenesis
           textures_hsh = {
             texture: id.wrap_path(prefix: 'block/')
           }
+          data.update textures: textures_hsh
 
-          @nxt.process_block_model(
-            id.wrap_path(suffix: '_post'),
-            data.merge({ parent: 'minecraft:block/fence_post', textures: textures_hsh })
-          )
-          @nxt.process_block_model(
-            id.wrap_path(suffix: '_side'),
-            data.merge({ parent: 'minecraft:block/fence_side', textures: textures_hsh })
-          )
-          @nxt.process_block_model(
-            id.wrap_path(suffix: '_inventory'),
-            data.merge({ parent: 'minecraft:block/fence_inventory', textures: textures_hsh })
-          )
+          forwarder = CommonModelForwarder.new(@nxt, id, data, 'minecraft:block/fence')
+
+          forwarder.forward '_post'
+          forwarder.forward '_side'
+          forwarder.forward '_inventory'
         end
       end
     end

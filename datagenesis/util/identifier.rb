@@ -23,3 +23,9 @@ module Datagenesis
     end
   end
 end
+
+class String
+  def to_id
+    Identifier.new(*split(':'))
+  end
+end

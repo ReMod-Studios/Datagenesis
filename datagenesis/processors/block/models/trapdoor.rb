@@ -14,7 +14,7 @@ module Datagenesis
         VARIANTS = Datagenesis::VariantFactory.build(*PROPERTIES)
 
         def process_blockstate(id, data)
-          data[:variants] = VARIANTS.map { |var| map_each_variant(var, id) }.to_h
+          conf_variant_blockstate(data, variants: VARIANTS) { |var| map_each_variant(var, id) }
 
           forward(id, data)
         end
