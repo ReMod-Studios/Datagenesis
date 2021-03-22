@@ -30,7 +30,7 @@ module Datagenesis
 
         CommonModelForwarder = Struct.new :nxt, :id, :data, :parent_base do
           def forward(path_suffix = nil, parent_suffix = path_suffix)
-            nxt.process_block_model(
+            nxt.process_java_block_model(
               path_suffix.nil? ? id : id.wrap_path(suffix: path_suffix),
               data.merge(
                 {

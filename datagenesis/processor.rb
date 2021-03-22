@@ -11,8 +11,11 @@ module Datagenesis
     end
 
     def process(entry)
-      @nxt&.process entry
+      forward entry
+      process_end
     end
+
+    def process_end; end
 
     private
 

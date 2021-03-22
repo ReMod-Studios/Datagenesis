@@ -30,7 +30,7 @@ module Datagenesis
         private
 
         def forward_model(path_suffix, id, data)
-          @nxt.process_block_model(
+          @nxt.process_java_block_model(
             id.wrap_path(suffix: path_suffix),
             data.merge(
               {
