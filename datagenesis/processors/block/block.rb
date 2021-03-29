@@ -5,7 +5,7 @@ module Datagenesis
     module Block
       class Block < Processor
         register :block
-        processor_attr :java_class, :package
+        #processor_attr :java_class, :package
 
         def process(entry)
           id = entry.id

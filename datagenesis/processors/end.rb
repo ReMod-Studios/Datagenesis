@@ -6,6 +6,11 @@ module Datagenesis
   module Processors
     class End < Processor
       register :end
+      #processor_attr :pretty_print_json
+
+      def initialize
+        bedrock_init
+      end
 
       def process_end
         bedrock_conclude
@@ -18,7 +23,7 @@ module Datagenesis
       end
 
       def process_json(path, data)
-        process_file(path, JSON.pretty_generate(data))
+        process_file(path, @pretty_print_json ? JSON.pretty_generate(data) : JSON.generate(data))
       end
     end
   end

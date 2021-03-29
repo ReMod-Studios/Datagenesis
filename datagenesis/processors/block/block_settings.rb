@@ -7,7 +7,7 @@ module Datagenesis
         register :block_settings
 
         # TODO: add more settings
-        processor_attr :luminance
+        #processor_attr :luminance
       end
     end
   end

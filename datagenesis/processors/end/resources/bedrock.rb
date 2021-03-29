@@ -8,8 +8,7 @@ module Datagenesis
       BEHAVIOR_PACK = 'bedrock_behavior_pack'
       RESOURCE_PACK = 'bedrock_resource_pack'
 
-      def initialize
-        super
+      def bedrock_init
         @blocks_json = { format_version: [1, 1, 0] }
         @items_json = {}
       end

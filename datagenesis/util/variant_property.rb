@@ -13,7 +13,7 @@ module Datagenesis
     def initialize(id, *values, name: id)
       @id = id.to_sym.freeze
       @name = name.to_sym.freeze
-      @values = values.map { |v| VariantPropertyValue.new(@id, @name, v) }.freeze
+      @values = values.map { VariantPropertyValue.new(@id, @name, _1) }.freeze
     end
 
     class << self

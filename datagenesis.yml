@@ -1,6 +1,7 @@
 ---
 namespace: lumidep
 package: com.remodstudios.lumidep
+pretty_print_json: false
 
 contains:
   - group: block

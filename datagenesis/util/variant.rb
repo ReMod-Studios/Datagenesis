@@ -9,14 +9,14 @@ module Datagenesis
     end
 
     def [](*ids)
-      @property_pairs.filter { |v| v if ids.any? v.id }
-                     .sort_by { |a| ids.index(a.id) || Float::INFINITY }
+      @property_pairs.filter { _1 if ids.any? _1.id }
+                     .sort_by { ids.index(_1.id) || Float::INFINITY }
                      .map(&:value)
                      .freeze
     end
 
     def to_s
-      @property_pairs.map { |property| "#{property.name}=#{property.value}" }.join(',')
+      @property_pairs.map { "#{_1.name}=#{_1.value}" }.join(',')
     end
   end
 
@@ -34,7 +34,7 @@ module Datagenesis
       values = @properties.map(&:values)
       values[0]
         .product(*values[1..])
-        .map { |pairs| Variant.new(pairs) }
+        .map { Variant.new(_1) }
     end
 
     # Shorthand
@@ -49,7 +49,7 @@ module Datagenesis
       when Symbol
         VariantProperty.get(input)
       when Array
-        input.flatten.map { |it| process_input it }
+        input.flatten.map { process_input _1 }
       else
         input
       end
